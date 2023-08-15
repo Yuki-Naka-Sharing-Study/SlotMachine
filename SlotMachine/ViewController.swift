@@ -32,58 +32,38 @@ class ViewController: UIViewController {
         isSpinning = true
         startButton.isEnabled = false
         
-        // Randomly select emojis
-        let randomEmojis = (0..<emojis.count).map { _ in emojis.randomElement()! }
+        // Randomly select emojis for each slot
+        let randomEmojis1 = emojis.randomElement()!
+        let randomEmojis2 = emojis.randomElement()!
+        let randomEmojis3 = emojis.randomElement()!
         
         // Animate emojis with random selections
-        animateEmojis(emojis: randomEmojis, currentIndex: 0)
+        animateEmojis(emoji1: randomEmojis1, emoji2: randomEmojis2, emoji3: randomEmojis3)
     }
     
-//    private func animateEmojis(emojis: [String], currentIndex: Int) {
-//        UIView.animate(withDuration: 1, delay: 5, options: .curveLinear, animations: {
-//            self.emoji1Label.text = emojis[(currentIndex + 0) % emojis.count]
-//            self.emoji2Label.text = emojis[(currentIndex + 1) % emojis.count]
-//            self.emoji3Label.text = emojis[(currentIndex + 2) % emojis.count]
-//        }) { _ in //emojis.count * 3
-//            if currentIndex < emojis.count { // Control the number of rotations
-//                self.animateEmojis(emojis: emojis, currentIndex: currentIndex + 1)
-//            } else {
-//                self.stopSpinning(finalEmoji: emojis[currentIndex % emojis.count])
-//            }
-//        }
-//    }
-    
-    private func animateEmojis(emojis: [String], currentIndex: Int) {
+    private func animateEmojis(emoji1: String, emoji2: String, emoji3: String) {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.emoji1Label.alpha = 0
             self.emoji2Label.alpha = 0
             self.emoji3Label.alpha = 0
         }) { _ in
-            self.emoji1Label.text = emojis[(currentIndex + 0) % emojis.count]
-            self.emoji2Label.text = emojis[(currentIndex + 1) % emojis.count]
-            self.emoji3Label.text = emojis[(currentIndex + 2) % emojis.count]
+            self.emoji1Label.text = emoji1
+            self.emoji2Label.text = emoji2
+            self.emoji3Label.text = emoji3
             
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
                 self.emoji1Label.alpha = 1
                 self.emoji2Label.alpha = 1
                 self.emoji3Label.alpha = 1
             }) { _ in
-                if currentIndex < emojis.count {
-                    self.animateEmojis(emojis: emojis, currentIndex: currentIndex + 1)
-                } else {
-                    self.stopSpinning(finalEmoji: emojis[currentIndex % emojis.count])
-                }
+                self.stopSpinning()
             }
         }
     }
     
-    private func stopSpinning(finalEmoji: String) {
+    private func stopSpinning() {
         isSpinning = false
         startButton.isEnabled = true
-        
-        emoji1Label.text = finalEmoji
-        emoji2Label.text = finalEmoji
-        emoji3Label.text = finalEmoji
         
         if emoji1Label.text == emoji2Label.text && emoji2Label.text == emoji3Label.text {
             showAlert(message: "当たり！")
